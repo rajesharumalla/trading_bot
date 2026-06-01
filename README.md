@@ -114,6 +114,25 @@ Append `--raw` to any `place` command:
 python cli.py place --symbol BTCUSDT --side BUY --type MARKET --qty 0.001 --raw
 ```
 
+### Launch the Web UI Dashboard *(Bonus)*
+
+To launch the premium glassmorphic local web dashboard:
+
+```bash
+# Start the local UI server
+python gui.py
+```
+
+Then open **[http://localhost:8000](http://localhost:8000)** in your browser.
+
+The web UI provides a visual dashboard for:
+- Live Account Balance, Available Balance, and Unrealized P&L monitoring.
+- Interactive order placement (Market, Limit, and Stop-Market orders) with real-time UI validations.
+- Open Orders table with sync options.
+- Dynamic scrolling stream of your bot's **live logs** (`logs/trading_bot.log`).
+
+![Dashboard Screenshot](screenshots/dashboard.png)
+
 ---
 
 ## Example Output

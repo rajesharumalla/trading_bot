@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binance Futures Testnet Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: rgba(22, 28, 45, 0.4);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-glow: rgba(99, 102, 241, 0.25);
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.15);
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.15);
+      --warning: #f59e0b;
+      --accent: #d946ef;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Outfit', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(217, 70, 239, 0.1) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    header {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background-color: rgba(11, 15, 25, 0.8);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1.25rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .logo-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      background: linear-gradient(to right, #ffffff, #9ca3af);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .testnet-badge {
+      background-color: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: var(--warning);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    main {
+      max-width: 1400px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 1024px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── Cards & Containers ───────────────────────────────────────────── */
+
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .glass-card:hover {
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.75rem;
+    }
+
+    /* ── Account Balance Section ─────────────────────────────────────── */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 0.75rem;
+      padding: 1rem;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .stat-box.highlight {
+      grid-column: span 2;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(217, 70, 239, 0.05));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .stat-box.highlight .stat-value {
+      font-size: 1.85rem;
+      color: #ffffff;
+    }
+
+    .pnl-green {
+      color: var(--success);
+    }
+
+    .pnl-red {
+      color: var(--danger);
+    }
+
+    /* ── Forms and Inputs ────────────────────────────────────────────── */
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    select, input {
+      width: 100%;
+      background: rgba(11, 15, 25, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .side-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .side-btn {
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .side-btn.buy.active {
+      background: var(--success);
+      color: #ffffff;
+      border-color: var(--success);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+    }
+
+    .side-btn.sell.active {
+      background: var(--danger);
+      color: #ffffff;
+      border-color: var(--danger);
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+    }
+
+    .conditional-field {
+      display: none;
+      animation: slideDown 0.2s ease-out forwards;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: #ffffff;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--primary-glow);
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px var(--primary-glow);
+    }
+
+    .submit-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* ── Logs and Terminal ───────────────────────────────────────────── */
+
+    .terminal-container {
+      background: #060913;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      height: 300px;
+      overflow-y: auto;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.8rem;
+      color: #38bdf8;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
+    }
+
+    .terminal-line {
+      white-space: pre-wrap;
+      word-break: break-all;
+      line-height: 1.4;
+    }
+
+    .terminal-line.INFO { color: #a5f3fc; }
+    .terminal-line.WARNING { color: var(--warning); }
+    .terminal-line.ERROR { color: var(--danger); }
+    .terminal-line.DEBUG { color: var(--text-muted); }
+
+    /* ── Tables ──────────────────────────────────────────────────────── */
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 0.9rem;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .badge {
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge.buy {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .badge.sell {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    /* ── Alerts & Statuses ───────────────────────────────────────────── */
+
+    .alert {
+      padding: 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      display: none;
+      animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      border: 1px solid transparent;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .alert.success {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      display: block;
+    }
+
+    .alert.danger {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      display: block;
+    }
+
+    .btn-refresh {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      padding: 0.4rem 0.8rem;
+      font-family: inherit;
+      border-radius: 0.35rem;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-refresh:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .empty-state {
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .spinner {
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: 50%;
+      border-left-color: #ffffff;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">🤖</div>
+      <div class="logo-title">Binance Futures Bot Dashboard</div>
+      <span class="testnet-badge">Testnet</span>
+    </div>
+    <div style="display: flex; gap: 1rem; align-items: center;">
+      <button class="btn-refresh" onclick="refreshAll()">Sync Data</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Left Column: Controls & Placer -->
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+      
+      <!-- Account Overview Card -->
+      <section class="glass-card">
+        <h2 class="card-title">Account Summary</h2>
+        <div id="account-alert" class="alert danger" style="display:none;"></div>
+        <div class="stats-grid">
+          <div class="stat-box highlight">
+            <div class="stat-label">Available Balance</div>
+            <div id="avail-balance" class="stat-value">— USDT</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Total Wallet Balance</div>
+            <div id="wallet-balance" class="stat-value">— USDT</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Unrealized PnL</div>
+            <div id="unrealized-pnl" class="stat-value">— USDT</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Order Form Card -->
+      <section class="glass-card">
+        <h2 class="card-title">Place Order</h2>
+        
+        <div id="form-alert" class="alert" style="display:none;"></div>
+
+        <form id="order-form" onsubmit="submitOrder(event)">
+          <!-- Side Selector -->
+          <div class="side-selector">
+            <div id="side-buy" class="side-btn buy active" onclick="setSide('BUY')">BUY (LONG)</div>
+            <div id="side-sell" class="side-btn sell" onclick="setSide('SELL')">SELL (SHORT)</div>
+          </div>
+
+          <div class="input-row">
+            <!-- Symbol -->
+            <div class="form-group">
+              <label for="symbol">Symbol</label>
+              <input type="text" id="symbol" value="BTCUSDT" placeholder="e.g. BTCUSDT" required>
+            </div>
+
+            <!-- Order Type -->
+            <div class="form-group">
+              <label for="type">Order Type</label>
+              <select id="type" onchange="toggleOrderFields()" required>
+                <option value="MARKET">MARKET</option>
+                <option value="LIMIT">LIMIT</option>
+                <option value="STOP_MARKET">STOP MARKET</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Quantity -->
+          <div class="form-group">
+            <label for="qty">Quantity (Contracts)</label>
+            <input type="number" id="qty" step="any" placeholder="e.g. 0.001" required>
+          </div>
+
+          <!-- Price (Conditional) -->
+          <div id="price-field" class="form-group conditional-field">
+            <label for="price">Limit Price (USDT)</label>
+            <input type="number" id="price" step="any" placeholder="e.g. 64500.00">
+          </div>
+
+          <!-- Stop Price (Conditional) -->
+          <div id="stop-price-field" class="form-group conditional-field">
+            <label for="stop-price">Stop Trigger Price (USDT)</label>
+            <input type="number" id="stop-price" step="any" placeholder="e.g. 62000.00">
+          </div>
+
+          <!-- Time-in-Force (Conditional) -->
+          <div id="tif-field" class="form-group conditional-field">
+            <label for="tif">Time in Force</label>
+            <select id="tif">
+              <option value="GTC">Good 'Til Cancelled (GTC)</option>
+              <option value="IOC">Immediate Or Cancel (IOC)</option>
+              <option value="FOK">Fill Or Kill (FOK)</option>
+              <option value="GTX">Post Only (GTX)</option>
+            </select>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="submit-btn" class="submit-btn">
+            <div id="submit-spinner" class="spinner"></div>
+            <span id="submit-text">Place Order</span>
+          </button>
+        </form>
+      </section>
+
+    </div>
+
+    <!-- Right Column: Monitoring & Logs -->
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+
+      <!-- Open Orders Card -->
+      <section class="glass-card" style="flex: 1;">
+        <h2 class="card-title">
+          Open Orders
+          <button class="btn-refresh" onclick="fetchOpenOrders()">Refresh</button>
+        </h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Symbol</th>
+                <th>Side</th>
+                <th>Type</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body">
+              <tr>
+                <td colspan="7" class="empty-state">Loading open orders...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Logs Card -->
+      <section class="glass-card">
+        <h2 class="card-title">
+          Live Bot Logs
+          <button class="btn-refresh" onclick="fetchLogs()">Refresh Logs</button>
+        </h2>
+        <div class="terminal-container" id="terminal">
+          <div class="terminal-line">System initialised. Waiting for stream...</div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    let activeSide = 'BUY';
+
+    // Run on startup
+    window.addEventListener('DOMContentLoaded', () => {
+      refreshAll();
+      // Auto-refresh account & logs every 15 seconds
+      setInterval(refreshAll, 15000);
+    });
+
+    function setSide(side) {
+      activeSide = side;
+      document.getElementById('side-buy').classList.toggle('active', side === 'BUY');
+      document.getElementById('side-sell').classList.toggle('active', side === 'SELL');
+    }
+
+    function toggleOrderFields() {
+      const type = document.getElementById('type').value;
+      const priceField = document.getElementById('price-field');
+      const stopPriceField = document.getElementById('stop-price-field');
+      const tifField = document.getElementById('tif-field');
+
+      priceField.style.display = (type === 'LIMIT') ? 'block' : 'none';
+      tifField.style.display = (type === 'LIMIT') ? 'block' : 'none';
+      stopPriceField.style.display = (type === 'STOP_MARKET') ? 'block' : 'none';
+
+      // Mark required fields
+      document.getElementById('price').required = (type === 'LIMIT');
+      document.getElementById('stop-price').required = (type === 'STOP_MARKET');
+    }
+
+    function refreshAll() {
+      fetchAccount();
+      fetchOpenOrders();
+      fetchLogs();
+    }
+
+    async function fetchAccount() {
+      const alertBox = document.getElementById('account-alert');
+      try {
+        const res = await fetch('/api/account');
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+          alertBox.style.display = 'none';
+          document.getElementById('wallet-balance').innerText = `${Number(data.totalWalletBalance).toFixed(2)} USDT`;
+          document.getElementById('avail-balance').innerText = `${Number(data.availableBalance).toFixed(2)} USDT`;
+          
+          const pnlVal = Number(data.totalUnrealizedProfit);
+          const pnlEl = document.getElementById('unrealized-pnl');
+          pnlEl.innerText = `${pnlVal >= 0 ? '+' : ''}${pnlVal.toFixed(2)} USDT`;
+          pnlEl.className = 'stat-value ' + (pnlVal >= 0 ? 'pnl-green' : 'pnl-red');
+        } else {
+          alertBox.innerText = `API Setup: ${data.message || 'Verification failed.'}`;
+          alertBox.style.display = 'block';
+        }
+      } catch (err) {
+        alertBox.innerText = 'Unable to connect to local server.';
+        alertBox.style.display = 'block';
+      }
+    }
+
+    async function fetchOpenOrders() {
+      const tbody = document.getElementById('orders-table-body');
+      try {
+        const symbolInput = document.getElementById('symbol').value.trim();
+        const url = symbolInput ? `/api/orders?symbol=${symbolInput}` : '/api/orders';
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.status === 'success') {
+          const orders = data.orders || [];
+          if (orders.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="empty-state">No open orders on testnet.</td></tr>`;
+            return;
+          }
+
+          tbody.innerHTML = orders.map(o => `
+            <tr>
+              <td>${o.orderId}</td>
+              <td style="font-weight: 500;">${o.symbol}</td>
+              <td><span class="badge ${o.side.toLowerCase()}">${o.side}</span></td>
+              <td>${o.type}</td>
+              <td>${o.origQty}</td>
+              <td>${o.price && o.price !== '0' ? o.price : 'Market'}</td>
+              <td style="color: var(--warning); font-weight: 500;">${o.status}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbody.innerHTML = `<tr><td colspan="7" class="empty-state pnl-red">Failed to load open orders: ${data.message}</td></tr>`;
+        }
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-state pnl-red">Could not reach server.</td></tr>`;
+      }
+    }
+
+    async function fetchLogs() {
+      const term = document.getElementById('terminal');
+      try {
+        const res = await fetch('/api/logs');
+        const data = await res.json();
+        
+        if (data.status === 'success' && data.logs) {
+          if (data.logs.length === 0) {
+            term.innerHTML = '<div class="terminal-line">No logs found.</div>';
+            return;
+          }
+
+          term.innerHTML = data.logs.map(line => {
+            let levelClass = 'INFO';
+            if (line.includes('| WARNING  |')) levelClass = 'WARNING';
+            if (line.includes('| ERROR    |')) levelClass = 'ERROR';
+            if (line.includes('| DEBUG    |')) levelClass = 'DEBUG';
+            return `<div class="terminal-line ${levelClass}">${escapeHtml(line)}</div>`;
+          }).join('');
+          
+          // Scroll to bottom
+          term.scrollTop = term.scrollHeight;
+        }
+      } catch (err) {
+        term.innerHTML = '<div class="terminal-line pnl-red">Failed to load logs.</div>';
+      }
+    }
+
+    async function submitOrder(e) {
+      e.preventDefault();
+      
+      const formAlert = document.getElementById('form-alert');
+      const submitBtn = document.getElementById('submit-btn');
+      const spinner = document.getElementById('submit-spinner');
+      const submitText = document.getElementById('submit-text');
+
+      formAlert.style.display = 'none';
+      formAlert.className = 'alert';
+      
+      // Disable UI during loading
+      submitBtn.disabled = true;
+      spinner.style.display = 'inline-block';
+      submitText.innerText = 'Submitting...';
+
+      const payload = {
+        symbol: document.getElementById('symbol').value.trim(),
+        side: activeSide,
+        type: document.getElementById('type').value,
+        qty: document.getElementById('qty').value,
+        price: document.getElementById('price').value || null,
+        stop_price: document.getElementById('stop-price').value || null,
+        tif: document.getElementById('tif').value
+      };
+
+      try {
+        const res = await fetch('/api/place', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok && data.status === 'success') {
+          formAlert.innerText = `Success! Order ID: ${data.data.orderId} submitted successfully (Status: ${data.data.status}).`;
+          formAlert.classList.add('success');
+          formAlert.style.display = 'block';
+          document.getElementById('order-form').reset();
+          toggleOrderFields();
+          refreshAll();
+        } else {
+          formAlert.innerText = `Error: ${data.message || 'Submission failed.'}`;
+          formAlert.classList.add('danger');
+          formAlert.style.display = 'block';
+        }
+      } catch (err) {
+        formAlert.innerText = 'Failed to connect to local server.';
+        formAlert.classList.add('danger');
+        formAlert.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        spinner.style.display = 'none';
+        submitText.innerText = 'Place Order';
+      }
+    }
+
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+  </script>
+</body>
+</html>
