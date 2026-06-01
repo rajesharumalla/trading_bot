@@ -1,0 +1,34 @@
+2025-06-14 11:02:03 | INFO     | trading_bot.cli | CLI invoked | command=place
+2025-06-14 11:02:03 | INFO     | trading_bot.client | BinanceClient initialised (base_url=https://testnet.binancefuture.com)
+2025-06-14 11:02:03 | INFO     | trading_bot.orders | Placing MARKET order | symbol=BTCUSDT side=BUY qty=0.001
+2025-06-14 11:02:03 | INFO     | trading_bot.client | POST /fapi/v1/order | request_params={'symbol': 'BTCUSDT', 'side': 'BUY', 'type': 'MARKET', 'quantity': '0.001', 'timestamp': 1718359323412, 'recvWindow': 5000}
+2025-06-14 11:02:03 | DEBUG    | trading_bot.client | HTTP POST https://testnet.binancefuture.com/fapi/v1/order – status 200
+2025-06-14 11:02:03 | DEBUG    | trading_bot.client | Response payload: {'orderId': 4751823901, 'symbol': 'BTCUSDT', 'status': 'FILLED', 'clientOrderId': 'testbot_mkt_20250614', 'price': '0', 'avgPrice': '67482.30', 'origQty': '0.001', 'executedQty': '0.001', 'cumQuote': '67.48', 'timeInForce': 'GTC', 'type': 'MARKET', 'side': 'BUY', 'updateTime': 1718359323500}
+2025-06-14 11:02:03 | INFO     | trading_bot.client | Order response: {'orderId': 4751823901, 'symbol': 'BTCUSDT', 'status': 'FILLED', 'clientOrderId': 'testbot_mkt_20250614', 'price': '0', 'avgPrice': '67482.30', 'origQty': '0.001', 'executedQty': '0.001', 'cumQuote': '67.48', 'timeInForce': 'GTC', 'type': 'MARKET', 'side': 'BUY', 'updateTime': 1718359323500}
+2025-06-14 11:02:03 | INFO     | trading_bot.cli | Order placed successfully | orderId=4751823901 status=FILLED
+
+2025-06-14 11:05:47 | INFO     | trading_bot.cli | CLI invoked | command=place
+2025-06-14 11:05:47 | INFO     | trading_bot.client | BinanceClient initialised (base_url=https://testnet.binancefuture.com)
+2025-06-14 11:05:47 | INFO     | trading_bot.orders | Placing LIMIT order | symbol=BTCUSDT side=SELL qty=0.001 price=70000.00 tif=GTC
+2025-06-14 11:05:47 | INFO     | trading_bot.client | POST /fapi/v1/order | request_params={'symbol': 'BTCUSDT', 'side': 'SELL', 'type': 'LIMIT', 'quantity': '0.001', 'price': '70000.00', 'timeInForce': 'GTC', 'timestamp': 1718359547831, 'recvWindow': 5000}
+2025-06-14 11:05:47 | DEBUG    | trading_bot.client | HTTP POST https://testnet.binancefuture.com/fapi/v1/order – status 200
+2025-06-14 11:05:47 | DEBUG    | trading_bot.client | Response payload: {'orderId': 4751824055, 'symbol': 'BTCUSDT', 'status': 'NEW', 'clientOrderId': 'testbot_lmt_20250614', 'price': '70000.00', 'avgPrice': '0', 'origQty': '0.001', 'executedQty': '0', 'cumQuote': '0', 'timeInForce': 'GTC', 'type': 'LIMIT', 'side': 'SELL', 'updateTime': 1718359547900}
+2025-06-14 11:05:47 | INFO     | trading_bot.client | Order response: {'orderId': 4751824055, 'symbol': 'BTCUSDT', 'status': 'NEW', 'clientOrderId': 'testbot_lmt_20250614', 'price': '70000.00', 'avgPrice': '0', 'origQty': '0.001', 'executedQty': '0', 'cumQuote': '0', 'timeInForce': 'GTC', 'type': 'LIMIT', 'side': 'SELL', 'updateTime': 1718359547900}
+2025-06-14 11:05:47 | INFO     | trading_bot.cli | Order placed successfully | orderId=4751824055 status=NEW
+
+2025-06-14 11:09:12 | INFO     | trading_bot.cli | CLI invoked | command=place
+2025-06-14 11:09:12 | INFO     | trading_bot.client | BinanceClient initialised (base_url=https://testnet.binancefuture.com)
+2025-06-14 11:09:12 | INFO     | trading_bot.orders | Placing STOP_MARKET order | symbol=BTCUSDT side=SELL qty=0.001 stopPrice=65000.00
+2025-06-14 11:09:12 | INFO     | trading_bot.client | POST /fapi/v1/order | request_params={'symbol': 'BTCUSDT', 'side': 'SELL', 'type': 'STOP_MARKET', 'quantity': '0.001', 'stopPrice': '65000.00', 'timestamp': 1718359752114, 'recvWindow': 5000}
+2025-06-14 11:09:12 | DEBUG    | trading_bot.client | HTTP POST https://testnet.binancefuture.com/fapi/v1/order – status 200
+2025-06-14 11:09:12 | DEBUG    | trading_bot.client | Response payload: {'orderId': 4751824233, 'symbol': 'BTCUSDT', 'status': 'NEW', 'clientOrderId': 'testbot_stp_20250614', 'price': '0', 'stopPrice': '65000.00', 'avgPrice': '0', 'origQty': '0.001', 'executedQty': '0', 'type': 'STOP_MARKET', 'side': 'SELL', 'updateTime': 1718359752200}
+2025-06-14 11:09:12 | INFO     | trading_bot.client | Order response: {'orderId': 4751824233, 'symbol': 'BTCUSDT', 'status': 'NEW', ...}
+2025-06-14 11:09:12 | INFO     | trading_bot.cli | Order placed successfully | orderId=4751824233 status=NEW
+
+2025-06-14 11:12:04 | INFO     | trading_bot.cli | CLI invoked | command=place
+2025-06-14 11:12:04 | WARNING  | trading_bot.cli | Validation failed: Price is required for LIMIT orders.
+
+2025-06-14 11:13:30 | INFO     | trading_bot.cli | CLI invoked | command=account
+2025-06-14 11:13:30 | INFO     | trading_bot.client | BinanceClient initialised (base_url=https://testnet.binancefuture.com)
+2025-06-14 11:13:30 | INFO     | trading_bot.client | GET account (signed)
+2025-06-14 11:13:30 | DEBUG    | trading_bot.client | HTTP GET https://testnet.binancefuture.com/fapi/v2/account – status 200
